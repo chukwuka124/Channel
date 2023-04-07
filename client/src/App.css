@@ -1,0 +1,10 @@
+.container {
+  padding-top: 20px;
+  /* text-align: center; */
+}
+
+.title {
+  font-size: 30px;
+  text-transform: uppercase;
+  text-align: center;
+}

@@ -1,0 +1,41 @@
+.container{
+    margin-top: 10px;
+    text-align: center;
+}
+
+.subtitle{
+    font-size: 24px;
+}
+
+.channels{
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.button {
+    background-color: #606060;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    font-family: "Ubuntu", sans-serif;
+}
+
+.button a{
+    text-decoration: none;
+    color: white;
+}
+
+.alert{
+    margin-top: 10px;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+}

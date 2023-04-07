@@ -1,0 +1,89 @@
+.message{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+    border-radius: 25px;
+    padding: 20px;
+    position: relative;
+}
+
+.sender{
+    align-items: flex-end;
+}
+
+.receiver{
+    align-items: flex-start;
+}
+
+.messageHeader{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+}
+
+.messageUser{
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.messageDate{
+    font-size: 12px;
+}
+.messageBody{
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 16px;
+}
+
+.senderBody{
+    background-color: #fff;
+}
+
+.receiverBody{
+    background-color: rgba(240, 248, 255, 0.618);
+    align-self: flex-start;
+}
+
+.replies{
+    margin-top: 10px;
+    color: red;
+    font-size: 12px;
+}
+
+.receiverReply {
+    border-left: 2px solid gray;
+    padding-left: 10px;
+  }
+
+  .senderReply {
+    border-right: 2px solid gray;
+    padding-right: 10px;
+  }
+
+  .smallButton{
+    background-color: #606060;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    padding: 5px 10px;
+    text-align: center;
+    font-size: 12px;
+    margin: 4px 2px;
+    cursor: pointer;
+    font-family: "Ubuntu", sans-serif;
+  }
+
+  .replyingAlert{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    margin: 0 0 50px 50px;
+    background-color: #c4c4c4;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 14px;
+    font-family: "Ubuntu", sans-serif;
+    cursor: pointer;
+  }

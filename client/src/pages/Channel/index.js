@@ -4,7 +4,8 @@ import { useAllMessages, useChannels, useCreateMessage } from '../../hooks'
 import styles from "./styles.module.css"
 import { useUser } from '../../hooks'
 import Message from '../../components/Message'
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useRoutes } from "react-router-dom";
+import { BackButton, Logout } from '../../components'
 
 const Channel = () => {
     const { id } = useParams()
@@ -57,6 +58,7 @@ const Channel = () => {
                                 :
                                 allMessages.map(message => (
                                     <Message
+                                        key={message.id}
                                         message={message}
                                         user={user}
                                         setNewMessageParentId={setNewMessageParentId}
@@ -85,6 +87,10 @@ const Channel = () => {
                     Send
                 </button>
             </form>
+
+            {user && <Logout user={user} />}
+
+            <BackButton href={"/allChannels"} />
         </>
     )
 }

@@ -3,6 +3,7 @@ import { useChannels, useUser } from '../../hooks'
 import styles from "./styles.module.css"
 import { Link } from 'react-router-dom'
 import { useNavigate } from "react-router-dom";
+import { BackButton, Logout } from '../../components';
 
 const Channels = () => {
     const channels = useChannels()
@@ -38,7 +39,7 @@ const Channels = () => {
                             </>
                             :
                             channels.map(channel => (
-                                <div key={channel._d}>
+                                <div key={channel.id}>
                                     <Link to={`/channel/${channel.id}`}>
                                         <button className={styles.button}>
                                             {channel.name}
@@ -50,6 +51,8 @@ const Channels = () => {
                 </>
             }
 
+            {user && <Logout user={user} />}
+            <BackButton href='/home' />
         </div>
     )
 }

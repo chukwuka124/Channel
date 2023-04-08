@@ -42,6 +42,8 @@ const connectToDB = () => {
                         channel_id INT NOT NULL,
                         parent_id INT,
                         created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                        likes INT DEFAULT 0,
+                        dislikes INT DEFAULT 0,
                         FOREIGN KEY (channel_id) REFERENCES channels(id)
                     )`, (err) => {
                     if (err) {
@@ -61,6 +63,34 @@ const connectToDB = () => {
                         return
                     }
                     console.log('Table "users" created!');
+                });
+
+                connection.query(`CREATE TABLE IF NOT EXISTS likes(
+                        id INT AUTO_INCREMENT PRIMARY KEY,
+                        user_id INT NOT NULL,
+                        message_id INT NOT NULL,
+                        FOREIGN KEY (user_id) REFERENCES users(id),
+                        FOREIGN KEY (message_id) REFERENCES messages(id)
+                    )`, (err) => {
+                    if (err) {
+                        console.log("Error creating table 'likes' !", err);
+                        return
+                    }
+                    console.log('Table "likes" created!');
+                });
+
+                connection.query(`CREATE TABLE IF NOT EXISTS dislikes(
+                        id INT AUTO_INCREMENT PRIMARY KEY,
+                        user_id INT NOT NULL,
+                        message_id INT NOT NULL,
+                        FOREIGN KEY (user_id) REFERENCES users(id),
+                        FOREIGN KEY (message_id) REFERENCES messages(id)
+                    )`, (err) => {
+                    if (err) {
+                        console.log("Error creating table 'dislikes' !", err);
+                        return
+                    }
+                    console.log('Table "dislikes" created!');
                 });
             });
         });

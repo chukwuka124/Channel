@@ -8,14 +8,11 @@ const Landingpage = () => {
     const [name, setName] = useState('')
     const [password, setPassword] = useState('')
     const [isLogIn, setIsLogin] = useState(true)
-    const [hasCalled, setHasCalled] = useState(false)
+
     const navigate = useNavigate();
     const user = useUser()
 
-    useEffect(() => {
-        api.get(`/`)
-    }, [])
-
+    useEffect(() => { api.get(`/`) }, [])
     useEffect(() => {
         setName('')
         setPassword('')

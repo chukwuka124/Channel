@@ -1,15 +1,18 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useAllMessages, useChannels, useCreateMessage } from '../../hooks'
 import styles from "./styles.module.css"
 import { useUser } from '../../hooks'
 import Message from '../../components/Message'
 import { useNavigate } from "react-router-dom";
+import { io } from 'socket.io-client';
+
+const socket = io('http://localhost:8080');
 
 const Channel = () => {
     const { id } = useParams()
     const [messageCreated, setMessageCreated] = useState(false)
-    const messages = useAllMessages(id, messageCreated)
+    const { messages, setMessages } = useAllMessages(id, messageCreated)
     const channels = useChannels()
     const [isLoading, setIsLoading] = useState(true)
     const [channelName, setChannelName] = useState('')
@@ -22,17 +25,34 @@ const Channel = () => {
 
     const handleCreateMessage = async (e) => {
         e.preventDefault();
-        await createNewMessage(message, id, user.id, newMessageParentId)
+        await createNewMessage(message, id, user.id, newMessageParentId, user.name)
         setMessage('');
         setMessageCreated(true);
         setNewMessageParentId(null)
     }
+    const bottomRef = useRef(null);
+    useEffect(() => {
+        if (!!channelName)
+            socket.emit('join', { name: user.name, groupId: id });
+    }, [channelName])
+    useEffect(() => {
+        socket.on('newMessage', (data) => {
+            setMessages(data)
+        });
+
+    }, [])
+    useEffect(() => {
+        // 👇️ scroll to bottom every time messages change
+        bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+        setTimeout(() => {
+            bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+        }, 700);
+    }, [messages]);
 
     useEffect(() => {
         const name = channels !== undefined ? channels.filter(channel => channel.id === parseInt(id))[0].name : null
         name !== null && setChannelName(name)
         name !== null && setIsLoading(false)
-
     }, [channels])
 
     useEffect(() => {
@@ -63,9 +83,8 @@ const Channel = () => {
                                         messageCreated={messageCreated}
                                     />
                                 ))}
+                            <div ref={bottomRef} />
                         </div>
-
-
                     </>
                 }
             </div>
@@ -87,6 +106,6 @@ const Channel = () => {
             </form>
         </>
     )
-}
+};
 
-export default Channel
+export default Channel;

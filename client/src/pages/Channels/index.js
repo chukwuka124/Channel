@@ -13,8 +13,7 @@ const Channels = () => {
     useEffect(() => {
         setTimeout(() => {
             setIsLoading(false)
-        }
-            , 500)
+        }, 500)
     }, [])
 
     useEffect(() => {
@@ -49,7 +48,6 @@ const Channels = () => {
                     </div>
                 </>
             }
-
         </div>
     )
 }

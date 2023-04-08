@@ -15,7 +15,7 @@ const useAllMessages = (id, messageCreated) => {
         }
         catch (err) { console.log(err) }
     }
-    return messages
+    return { messages, setMessages }
 }
 
 export default useAllMessages

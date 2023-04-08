@@ -13,7 +13,8 @@ services:
       DB_USER: root
       DB_PASSWORD: admin
     volumes:
-      - ./:/code
+      - /usr/app/node_modules
+      - .:/usr/app
     depends_on:
       - mysql1
     stdin_open: true

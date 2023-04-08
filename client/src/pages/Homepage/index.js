@@ -1,8 +1,17 @@
-import React from 'react'
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import styles from "./styles.module.css"
+import { useNavigate } from "react-router-dom";
+import { useUser } from '../../hooks'
+import { Logout } from '../../components';
 
 const Homepage = () => {
+    const navigate = useNavigate();
+    const user = useUser()
+
+    useEffect(() => {
+        if (!user) navigate('/')
+    }, [])
     return (
         <div className={styles.main}>
             <Link to='/allChannels'>
@@ -16,6 +25,8 @@ const Homepage = () => {
                     Create a channel
                 </button>
             </Link>
+
+            {/* <Logout /> */}
         </div>
     )
 }

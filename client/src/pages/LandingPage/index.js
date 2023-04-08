@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import styles from "./styles.module.css"
-import axios from 'axios'
+import api from '../../api'
+import { useUser } from '../../hooks'
 
 const Landingpage = () => {
     const [name, setName] = useState('')
@@ -9,9 +10,10 @@ const Landingpage = () => {
     const [isLogIn, setIsLogin] = useState(true)
     const [hasCalled, setHasCalled] = useState(false)
     const navigate = useNavigate();
+    const user = useUser()
 
     useEffect(() => {
-        axios.get(`http://localhost:8080`)
+        api.get(`/`)
     }, [])
 
     useEffect(() => {
@@ -19,17 +21,27 @@ const Landingpage = () => {
         setPassword('')
     }, [isLogIn])
 
+    useEffect(() => {
+        if (user)
+            navigate('/home')
+    }, [user])
+
     const submit = async () => {
         try {
             if (name.length < 3) throw 'Name must be longer than 3 characters'
             if (password.length < 3) throw 'Password must be longer than 3 characters'
-            // await axios.post(`http://localhost:8080/createAccountOrSignIn`, {
-            //     name, password, isLogIn
-            // })
-            navigate('/home');
+
+            const user = await api.post(`/createAccountOrSignIn`, {
+                name, password, isLogIn
+            })
+
+            if (user.status === 200 && user.data) {
+                localStorage.setItem("user", JSON.stringify(user.data))
+                navigate('/home');
+            }
         } catch (error) {
             console.log(error)
-            alert(error?.message || JSON.stringify(error))
+            alert(error?.response.data.message || JSON.stringify(error))
         }
     }
     return (

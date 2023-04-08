@@ -4,6 +4,7 @@ import { useAllMessages, useChannels, useCreateMessage } from '../../hooks'
 import styles from "./styles.module.css"
 import { useUser } from '../../hooks'
 import Message from '../../components/Message'
+import { useNavigate } from "react-router-dom";
 
 const Channel = () => {
     const { id } = useParams()
@@ -17,6 +18,7 @@ const Channel = () => {
     const user = useUser()
     const [createNewMessage] = useCreateMessage()
     const [newMessageParentId, setNewMessageParentId] = useState(null)
+    const navigate = useNavigate();
 
     const handleCreateMessage = async (e) => {
         e.preventDefault();
@@ -36,6 +38,10 @@ const Channel = () => {
     useEffect(() => {
         messages && setAllMessages(messages)
     }, [messages])
+
+    useEffect(() => {
+        if (!user) navigate('/')
+    }, [])
 
     return (
         <>

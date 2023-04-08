@@ -40,21 +40,26 @@ app.post("/createAccountOrSignIn", async (req, res) => {
     const { name, password, isLogIn } = req.body;
     try {
         if (isLogIn) {
-            db.query(`SELECT name,password FROM users WHERE name='${name}'`, (err, rows, result) => {
+            db.query(`SELECT * FROM users WHERE name=?`, [name], (err, rows, result) => {
 
                 if (err) throw err;
 
                 if (rows.length === 0) { return res.status(400).json({ message: 'This account does not exist' }); }
                 if (rows[0].password != password) { return res.status(400).json({ message: 'Password is incorrect' }); }
-                return res.status(200).send({ message: 'success' });
+                return res.status(200).send({ id: rows[0].id, name: rows[0].name });
             })
         } else {
 
-            db.query(`SELECT name,password FROM users WHERE name='${name}'`, (err, rows, result) => {
+            db.query(`SELECT name,password FROM users WHERE name=?`, [name], (err, rows, result) => {
                 if (err) throw err;
                 if (rows.length != 0) { return res.send(400).json({ message: 'An account with this name already exists' }) }
-                db.query(`INSERT INTO users (name,password) VALUES (?,?)`, [name, password])
-                return res.status(200).send({ message: 'success' });
+                db.query(`INSERT INTO users (name,password) VALUES (?,?)`, [name, password], (err, rows, result) => {
+                    if (err) throw err;
+                    db.query(`SELECT * FROM users WHERE id = LAST_INSERT_ID()`, (err, rows, result) => {
+                        if (err) throw err;
+                        return res.status(200).send({ id: rows[0].id, name: rows[0].name });
+                    })
+                })
             })
         }
     } catch (err) {

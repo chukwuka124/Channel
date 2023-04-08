@@ -2,11 +2,19 @@ import { useEffect, useState } from 'react'
 import styles from "./styles.module.css"
 import { useCreateChannel } from '../../hooks'
 import { Link } from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
+import { useUser } from '../../hooks'
 
 const NewChannel = () => {
     const [name, setName] = useState('');
     const [created, setCreated] = useState(false);
     const [channel, createNewChannel] = useCreateChannel()
+    const navigate = useNavigate();
+    const user = useUser()
+
+    useEffect(() => {
+        if (!user) navigate('/')
+    }, [])
 
     const handleCreateChannel = async (e) => {
         e.preventDefault();
@@ -14,7 +22,6 @@ const NewChannel = () => {
         setName('');
         setCreated(true);
     }
-
     return (
         <div className={styles.container}>
             <div className={styles.subtitle}>Create a new channel</div>

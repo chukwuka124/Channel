@@ -1,13 +1,31 @@
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Channel, Channels, Homepage, NewChannel, Landingpage } from './pages'
+import { useUser } from './hooks'
+import { Logout } from './components';
+import { useEffect, useState } from 'react';
 
 function App() {
-  return (
-    <div className="container">
-      <p className='title'>Communication Channel</p>
+  const user = useUser()
+  const [currentUser, setCurrentUser] = useState()
 
-      <BrowserRouter>
+  useEffect(() => {
+    if (!user) setCurrentUser(undefined)
+    else setCurrentUser(user)
+  }, [user])
+
+  return (
+    <BrowserRouter>
+      <div className="container">
+        <p className='title'>Communication Channel</p>
+        {currentUser &&
+          <div className="userInfo">
+            <p>Hi {currentUser.name},</p>
+            <Logout />
+          </div>
+        }
+
+
         <Routes>
           <Route exact path="/" element={<Landingpage />} />
           <Route exact path="/home" element={<Homepage />} />
@@ -15,8 +33,8 @@ function App() {
           <Route path="/newChannel" element={<NewChannel />} />
           <Route path="/channel/:id" element={<Channel />} />
         </Routes>
-      </BrowserRouter>
-    </div>
+      </div>
+    </BrowserRouter>
   );
 }
 

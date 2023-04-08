@@ -1,17 +1,24 @@
 import React, { useEffect, useState } from 'react'
-import { useChannels } from '../../hooks'
+import { useChannels, useUser } from '../../hooks'
 import styles from "./styles.module.css"
 import { Link } from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
 
 const Channels = () => {
     const channels = useChannels()
     const [isLoading, setIsLoading] = useState(true)
+    const navigate = useNavigate();
+    const user = useUser()
 
     useEffect(() => {
         setTimeout(() => {
             setIsLoading(false)
         }
             , 500)
+    }, [])
+
+    useEffect(() => {
+        if (!user) navigate('/')
     }, [])
 
     return (

@@ -5,12 +5,13 @@ import styles from "./styles.module.css"
 import { useUser } from '../../hooks'
 import Message from '../../components/Message'
 import { io } from 'socket.io-client';
-
 import { useNavigate, useRoutes } from "react-router-dom";
 import { BackButton, Logout } from '../../components'
 const socket = io('http://localhost:8080');
 
+
 const Channel = () => {
+    const socket = io('http://localhost:8080');
     const { id } = useParams()
     const [messageCreated, setMessageCreated] = useState(false)
     const { messages, setMessages } = useAllMessages(id, messageCreated)
@@ -26,7 +27,7 @@ const Channel = () => {
 
     const handleCreateMessage = async (e) => {
         e.preventDefault();
-        await createNewMessage(message, id, user.id, newMessageParentId, user.name)
+        await createNewMessage(message, parseInt(id), user.id, newMessageParentId, user.name)
         setMessage('');
         setMessageCreated(true);
         setNewMessageParentId(null)

@@ -75,14 +75,16 @@ app.get("/allMessages", (req, res) => {
     const { channelId } = req.query;
     // const messages = []
     try {
-        db.query(`SELECT messages.id, messages.text, messages.sender_id, users.name as sender, messages.parent_id, messages.created_at, (SELECT JSON_ARRAYAGG(likes.user_id) FROM likes WHERE likes.message_id = messages.id) as likes, (SELECT JSON_ARRAYAGG(dislikes.user_id) FROM dislikes WHERE dislikes.message_id = messages.id) as dislikes
-        FROM messages
-        INNER JOIN users ON messages.sender_id = users.id 
-        LEFT JOIN likes ON messages.id = likes.message_id
-        LEFT JOIN dislikes ON messages.id = dislikes.message_id
-        WHERE channel_id = ?
-        GROUP BY messages.id`,
-            [channelId], (err, rows, result) => {
+        db.query(
+            `SELECT messages.id, messages.text, messages.sender_id, users.name as sender, messages.parent_id, messages.created_at, (SELECT JSON_ARRAYAGG(likes.user_id) FROM likes WHERE likes.message_id = messages.id) as likes, (SELECT JSON_ARRAYAGG(dislikes.user_id) FROM dislikes WHERE dislikes.message_id = messages.id) as dislikes
+            FROM messages
+            INNER JOIN users ON messages.sender_id = users.id 
+            LEFT JOIN likes ON messages.id = likes.message_id
+            LEFT JOIN dislikes ON messages.id = dislikes.message_id
+            WHERE channel_id = ?
+            GROUP BY messages.id`
+            ,
+            [parseInt(channelId)], (err, rows, result) => {
                 if (err) throw err;
                 // const messages = [...rows]
 
@@ -116,23 +118,38 @@ app.get("/allMessages", (req, res) => {
 const getAllMessages = (channelId) => {
     return new Promise(resolve => {
         try {
-            db.query(`SELECT messages.id, messages.text, messages.sender_id, users.name as sender, messages.parent_id, messages.created_at
-                     FROM messages
-                     INNER JOIN users ON messages.sender_id = users.id 
-                     WHERE channel_id = ?`,
-                [channelId], (err, rows, result) => {
+            db.query(
+                `SELECT messages.id, messages.text, messages.sender_id, users.name as sender, messages.parent_id, messages.created_at, (SELECT JSON_ARRAYAGG(likes.user_id) FROM likes WHERE likes.message_id = messages.id) as likes, (SELECT JSON_ARRAYAGG(dislikes.user_id) FROM dislikes WHERE dislikes.message_id = messages.id) as dislikes
+                FROM messages
+                INNER JOIN users ON messages.sender_id = users.id 
+                LEFT JOIN likes ON messages.id = likes.message_id
+                LEFT JOIN dislikes ON messages.id = dislikes.message_id
+                WHERE channel_id = ?
+                GROUP BY messages.id`
+                ,
+                [parseInt(channelId)], (err, rows, result) => {
                     if (err) throw err;
-                    const messages = [...rows]
-                    rows.forEach(message => {
+                    // const messages = [...rows]
+
+                    const messages = rows.map(message => {
                         if (message.parent_id) {
-                            const parent = messages.find(m => m.id === message.parent_id)
+                            const parent = rows.find(m => m.id === message.parent_id)
                             if (parent) {
                                 parent.replies = parent.replies || []
                                 parent.replies.push(message)
                             }
                         }
+                        if (message.likes !== null) {
+                            const likes = JSON.parse(message.likes)
+                            message.likes = likes
+                        }
+                        if (message.dislikes !== null) {
+                            const dislikes = JSON.parse(message.dislikes)
+                            message.dislikes = dislikes
+                        }
+                        return message
                     })
-                    resolve(messages.filter(m => !m.parent_id))
+                    resolve(messages.filter(m => !m.parent_id));
                 })
         } catch (err) {
             console.log(err)
@@ -155,7 +172,7 @@ app.post("/createMessage", (req, res) => {
                     for (let i = 0; i < keys.length; i++) {
                         const key = keys[i]
                         if (sockets?.[key] && key !== name) {
-                            socketIdsToEmit.push(key)
+                            socketIdsToEmit.push(sockets[key].socketId)
                         }
                     }
                     const data = await getAllMessages(channelId)

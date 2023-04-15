@@ -4,17 +4,12 @@ import { useAllMessages, useChannels, useCreateMessage } from '../../hooks'
 import styles from "./styles.module.css"
 import { useUser } from '../../hooks'
 import Message from '../../components/Message'
-<<<<<<< HEAD
-import { useNavigate } from "react-router-dom";
 import { io } from 'socket.io-client';
-
-const socket = io('http://localhost:8080');
-=======
 import { useNavigate, useRoutes } from "react-router-dom";
 import { BackButton, Logout } from '../../components'
->>>>>>> 1d2cff6c252164fdf05b05e15916a67deb39746e
 
 const Channel = () => {
+    const socket = io('http://localhost:8080');
     const { id } = useParams()
     const [messageCreated, setMessageCreated] = useState(false)
     const { messages, setMessages } = useAllMessages(id, messageCreated)
@@ -30,7 +25,7 @@ const Channel = () => {
 
     const handleCreateMessage = async (e) => {
         e.preventDefault();
-        await createNewMessage(message, id, user.id, newMessageParentId, user.name)
+        await createNewMessage(message, parseInt(id), user.id, newMessageParentId, user.name)
         setMessage('');
         setMessageCreated(true);
         setNewMessageParentId(null)

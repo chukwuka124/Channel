@@ -49,12 +49,9 @@ const Channels = () => {
                     </div>
                 </>
             }
-<<<<<<< HEAD
-=======
 
             {user && <Logout user={user} />}
             <BackButton href='/home' />
->>>>>>> 1d2cff6c252164fdf05b05e15916a67deb39746e
         </div>
     )
 }

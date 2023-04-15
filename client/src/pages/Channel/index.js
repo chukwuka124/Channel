@@ -4,15 +4,11 @@ import { useAllMessages, useChannels, useCreateMessage } from '../../hooks'
 import styles from "./styles.module.css"
 import { useUser } from '../../hooks'
 import Message from '../../components/Message'
-<<<<<<< HEAD
-import { useNavigate } from "react-router-dom";
 import { io } from 'socket.io-client';
 
-const socket = io('http://localhost:8080');
-=======
 import { useNavigate, useRoutes } from "react-router-dom";
 import { BackButton, Logout } from '../../components'
->>>>>>> 1d2cff6c252164fdf05b05e15916a67deb39746e
+const socket = io('http://localhost:8080');
 
 const Channel = () => {
     const { id } = useParams()

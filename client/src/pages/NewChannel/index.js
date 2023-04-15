@@ -4,6 +4,7 @@ import { useCreateChannel } from '../../hooks'
 import { Link } from 'react-router-dom'
 import { useNavigate } from "react-router-dom";
 import { useUser } from '../../hooks'
+import { Logout, BackButton } from '../../components';
 
 const NewChannel = () => {
     const [name, setName] = useState('');
@@ -49,6 +50,9 @@ const NewChannel = () => {
                         </Link>}
                 </>
             }
+
+            {user && <Logout user={user} />}
+            <BackButton href='/home' />
         </div>
     )
 }

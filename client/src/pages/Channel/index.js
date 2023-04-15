@@ -4,10 +4,15 @@ import { useAllMessages, useChannels, useCreateMessage } from '../../hooks'
 import styles from "./styles.module.css"
 import { useUser } from '../../hooks'
 import Message from '../../components/Message'
+<<<<<<< HEAD
 import { useNavigate } from "react-router-dom";
 import { io } from 'socket.io-client';
 
 const socket = io('http://localhost:8080');
+=======
+import { useNavigate, useRoutes } from "react-router-dom";
+import { BackButton, Logout } from '../../components'
+>>>>>>> 1d2cff6c252164fdf05b05e15916a67deb39746e
 
 const Channel = () => {
     const { id } = useParams()
@@ -77,6 +82,7 @@ const Channel = () => {
                                 :
                                 allMessages.map(message => (
                                     <Message
+                                        key={message.id}
                                         message={message}
                                         user={user}
                                         setNewMessageParentId={setNewMessageParentId}
@@ -104,6 +110,10 @@ const Channel = () => {
                     Send
                 </button>
             </form>
+
+            {user && <Logout user={user} />}
+
+            <BackButton href={"/allChannels"} />
         </>
     )
 };

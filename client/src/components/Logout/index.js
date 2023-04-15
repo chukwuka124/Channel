@@ -1,16 +1,18 @@
 import React, { useState } from 'react'
 import styles from "./styles.module.css"
-import { useUser } from '../../hooks';
 import { useNavigate } from "react-router-dom";
 
-const Logout = () => {
+const Logout = ({ user }) => {
     const navigate = useNavigate();
 
     return (
-        <button className={styles.button} onClick={() => {
-            localStorage.removeItem('user')
-            navigate('/')
-        }}>Logout</button>
+        <div className={styles.userInfo}>
+            <p>Hi {user.name},</p>
+            <button className={styles.smallButton} onClick={() => {
+                localStorage.removeItem('user')
+                navigate('/')
+            }}>Logout</button>
+        </div>
     )
 }
 

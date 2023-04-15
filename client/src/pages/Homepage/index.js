@@ -11,7 +11,7 @@ const Homepage = () => {
 
     useEffect(() => {
         if (!user) navigate('/')
-    }, [])
+    }, [user])
     return (
         <div className={styles.main}>
             <Link to='/allChannels'>
@@ -26,7 +26,8 @@ const Homepage = () => {
                 </button>
             </Link>
 
-            {/* <Logout /> */}
+            {user && <Logout user={user} />
+            }
         </div>
     )
 }
